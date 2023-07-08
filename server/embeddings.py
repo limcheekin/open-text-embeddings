@@ -41,6 +41,14 @@ class CreateEmbeddingRequest(BaseModel):
         }
 
 
+class Embedding(BaseModel):
+    embedding: List[float]
+
+
+class CreateEmbeddingResponse(BaseModel):
+    data: List[Embedding]
+
+
 embeddings = None
 
 
@@ -55,9 +63,11 @@ def _create_embedding(
         embeddings = HuggingFaceEmbeddings(model_name=model_name)
 
     if isinstance(request.input, str):
-        return embeddings.embed_query(request.input)
+        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(request.input))])
     else:
-        return embeddings.embed_documents(request.input)
+        data = [Embedding(embedding=embedding)
+                for embedding in embeddings.embed_documents(request.input)]
+        return CreateEmbeddingResponse(data=data)
 
 
 @router.post(
