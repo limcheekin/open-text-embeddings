@@ -72,6 +72,7 @@ def _create_embedding(
 
 @router.post(
     "/v1/embeddings",
+    response_model=CreateEmbeddingResponse,
 )
 async def create_embedding(
     request: CreateEmbeddingRequest
