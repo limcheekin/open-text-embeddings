@@ -26,9 +26,10 @@ functions:
   embeddings:
     image:
       name: appimage
-    memorySize: 2048
+    memorySize: 4096
     environment:
       MODEL: intfloat/e5-large-v2
+      TRANSFORMERS_CACHE: /tmp/transformer_cache
     timeout:
       900
       # https://www.serverless.com/framework/docs/providers/aws/guide/functions#lambda-function-urls
