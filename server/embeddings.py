@@ -47,6 +47,8 @@ embeddings = None
 def _create_embedding(
     request: CreateEmbeddingRequest
 ):
+    global embeddings
+
     if embeddings is None:
         model_name = model_name = request.model or os.environ["MODEL"]
         print("Loading model:", model_name)
