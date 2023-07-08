@@ -23,7 +23,7 @@ provider:
           Resource: "*"
 
 functions:
-  chat:
+  embeddings:
     image:
       name: appimage
     memorySize: 2048

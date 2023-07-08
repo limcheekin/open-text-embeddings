@@ -50,9 +50,9 @@ def _create_embedding(
     global embeddings
 
     if embeddings is None:
-        model_name = model_name = request.model or os.environ["MODEL"]
+        model_name = request.model or os.environ["MODEL"]
         print("Loading model:", model_name)
-        embeddings = HuggingFaceEmbeddings(model_name)
+        embeddings = HuggingFaceEmbeddings(model_name=model_name)
 
     if isinstance(request.input, str):
         return embeddings.embed_query(request.input)
