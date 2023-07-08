@@ -1,0 +1,43 @@
+service: open-text-embeddings
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  deploymentMethod: direct
+  # REF: https://www.serverless.com/blog/container-support-for-lambda
+  ecr:
+    # In this section you can define images that will be built locally and uploaded to ECR
+    images:
+      appimage:
+        path: ./
+        file: Dockerfile
+  stage: dev
+  region: ap-southeast-1
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "lambda:InvokeFunction"
+          Resource: "*"
+
+functions:
+  chat:
+    image:
+      name: appimage
+    memorySize: 2048
+    environment:
+      MODEL: intfloat/e5-large-v2
+    timeout:
+      900
+      # https://www.serverless.com/framework/docs/providers/aws/guide/functions#lambda-function-urls
+    url:
+      # Allow CORS for all requests from any origin
+      cors:
+        allowedOrigins:
+          - "*"
+          #- https://url1.com
+          #- https://url2.com
+        allowedMethods:
+          - POST
