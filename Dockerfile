@@ -18,11 +18,10 @@ RUN chmod +x *.sh && \
 # Grab a fresh copy of the Python image
 FROM public.ecr.aws/lambda/python:3.10
 
-RUN mkdir intfloat
+RUN mkdir intfloat && mkdir -p open/text/embeddings/server 
 COPY --from=build-image intfloat intfloat
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-COPY embeddings.py ./
-COPY aws.py ./
+COPY open/text/embeddings/server ./open/text/embeddings/server
+COPY server-requirements.txt ./
+RUN pip install --no-cache-dir -r server-requirements.txt
 
-CMD [ "aws.handler" ]
+CMD [ "open.text.embeddings.server.aws.handler" ]

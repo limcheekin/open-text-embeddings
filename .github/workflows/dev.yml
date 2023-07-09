@@ -1,8 +1,6 @@
 name: Deploy Dev
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
+
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
@@ -20,10 +18,10 @@ jobs:
       - name: Serverless AWS authentication
         run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Deploy Lambda functions
-        run: cd server;sls deploy
+        run: sls deploy
       - name: Export Endpoint URL
-        run: cd server;echo $(sls info --verbose | grep endpoint | sed s/endpoint\:\ //g | awk '{print $1}') > endpoint
+        run: echo $(sls info --verbose | grep endpoint | sed s/endpoint\:\ //g | awk '{print $1}') > endpoint
       - name: Echo Endpoint URL
-        run: cd server;echo $(cat endpoint)
+        run: echo $(cat endpoint)
       - name: Test Lambda functions
-        run: "cd server;curl -X POST -H 'Content-Type: application/json' -d @text.json $(cat endpoint)v1/embeddings"
+        run: "curl -X POST -H 'Content-Type: application/json' -d @text.json $(cat endpoint)v1/embeddings"
