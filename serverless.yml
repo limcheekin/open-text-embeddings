@@ -26,7 +26,7 @@ functions:
   embeddings:
     image:
       name: appimage
-    memorySize: 4096
+    memorySize: 5120
     environment:
       MODEL: intfloat/e5-large-v2
       TRANSFORMERS_CACHE: /tmp/transformer_cache
