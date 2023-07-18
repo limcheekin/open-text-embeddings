@@ -23,12 +23,12 @@ provider:
           Resource: "*"
 
 functions:
-  embeddings:
+  universal-sentence-encoder:
     image:
       name: appimage
     memorySize: 5120
     environment:
-      MODEL: intfloat/e5-large-v2
+      MODEL: universal-sentence-encoder-large/5
       TRANSFORMERS_CACHE: /tmp/transformer_cache
     timeout:
       900

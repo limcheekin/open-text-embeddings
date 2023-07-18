@@ -4,7 +4,7 @@ from starlette.concurrency import run_in_threadpool
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from langchain.embeddings import HuggingFaceEmbeddings
+import tensorflow_hub as hub
 import os
 
 router = APIRouter()
@@ -63,13 +63,13 @@ def _create_embedding(
         else:
             model_name = os.environ["MODEL"]
         print("Loading model:", model_name)
-        embeddings = HuggingFaceEmbeddings(model_name=model_name)
+        embeddings = hub.load(model_name)
 
     if isinstance(request.input, str):
-        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(request.input))])
+        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings([request.input])[0])])
     else:
         data = [Embedding(embedding=embedding)
-                for embedding in embeddings.embed_documents(request.input)]
+                for embedding in embeddings(request.input)]
         return CreateEmbeddingResponse(data=data)
 
 

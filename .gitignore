@@ -160,4 +160,4 @@ cython_debug/
 #.idea/
 
 # model
-intfloat/
+universal-sentence-encoder*/

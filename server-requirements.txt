@@ -1,5 +1,5 @@
 fastapi
 sse-starlette
 mangum
-sentence_transformers
-langchain
+tensorflow-cpu
+tensorflow-hub

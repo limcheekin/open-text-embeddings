@@ -4,22 +4,19 @@
 # (2) Reduce the size of container images with DockerSlim. https://developers.redhat.com/articles/2022/01/17/reduce-size-container-images-dockerslim.
 FROM debian:bullseye-slim AS build-image
 
-COPY ./download_e5-large-v2.sh ./
+COPY ./download_universal-sentence-encoder-large-v5.sh ./
 
-# Install build dependencies
-RUN apt-get update && \
-    apt-get install -y git-lfs
 
 RUN chmod +x *.sh && \
-    ./download_e5-large-v2.sh && \
+    ./download_universal-sentence-encoder-large-v5.sh && \
     rm *.sh
 
 # Stage 3 - final runtime image
 # Grab a fresh copy of the Python image
 FROM public.ecr.aws/lambda/python:3.10
 
-RUN mkdir intfloat && mkdir -p open/text/embeddings/server 
-COPY --from=build-image intfloat intfloat
+RUN mkdir universal-sentence-encoder-large && mkdir -p open/text/embeddings/server 
+COPY --from=build-image universal-sentence-encoder-large universal-sentence-encoder-large
 COPY open/text/embeddings/server ./open/text/embeddings/server
 COPY server-requirements.txt ./
 RUN pip install --no-cache-dir -r server-requirements.txt
