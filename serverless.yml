@@ -1,4 +1,4 @@
-service: open-text-embeddings
+service: open-text-embeddings-use
 
 frameworkVersion: "3"
 
@@ -23,10 +23,10 @@ provider:
           Resource: "*"
 
 functions:
-  universal-sentence-encoder:
+  embeddings:
     image:
       name: appimage
-    memorySize: 5120
+    memorySize: 2560
     environment:
       MODEL: universal-sentence-encoder-large/5
       TRANSFORMERS_CACHE: /tmp/transformer_cache
