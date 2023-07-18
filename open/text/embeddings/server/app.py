@@ -66,9 +66,10 @@ def _create_embedding(
         embeddings = hub.load(model_name)
 
     if isinstance(request.input, str):
-        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings([request.input])[0])])
+        embedding = embeddings([request.input])[0].numpy().tolist()
+        return CreateEmbeddingResponse(data=[Embedding(embedding=embedding)])
     else:
-        data = [Embedding(embedding=embedding)
+        data = [Embedding(embedding=embedding.numpy().tolist())
                 for embedding in embeddings(request.input)]
         return CreateEmbeddingResponse(data=data)
 
