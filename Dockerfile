@@ -6,6 +6,9 @@ FROM debian:bullseye-slim AS build-image
 
 COPY ./download_universal-sentence-encoder-large-v5.sh ./
 
+# Install build dependencies
+RUN apt-get update && \
+    apt-get install -y curl
 
 RUN chmod +x *.sh && \
     ./download_universal-sentence-encoder-large-v5.sh && \
