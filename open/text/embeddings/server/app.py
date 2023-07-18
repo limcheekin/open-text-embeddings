@@ -58,7 +58,10 @@ def _create_embedding(
     global embeddings
 
     if embeddings is None:
-        model_name = request.model or os.environ["MODEL"]
+        if request.model == "text-embedding-ada-002":
+            model_name = os.environ["MODEL"]
+        else:
+            model_name = request.model
         print("Loading model:", model_name)
         embeddings = HuggingFaceEmbeddings(model_name=model_name)
 
