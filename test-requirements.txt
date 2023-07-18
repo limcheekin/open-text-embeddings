@@ -1,5 +1,6 @@
 langchain
 openai
+tiktoken
 
 # for dev only
 jupyter
