@@ -13,7 +13,7 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
 1. Install the dependencies by executing the following commands:
 
 ```bash
-pip install -r --no-cache-dir server-requirements.txt
+pip install --no-cache-dir -r server-requirements.txt
 pip install --no-cache-dir uvicorn
 ```
 
@@ -21,6 +21,15 @@ pip install --no-cache-dir uvicorn
 
 ```bash
 MODEL=intfloat/e5-large-v2 python -m open.text.embeddings.server
+```
+
+3. You will see the following text from your console once the server has started:
+
+```bash
+INFO:     Started server process [19705]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
 ```
 
 ## AWS Lambda Function
@@ -40,7 +49,7 @@ To get started:
 1. Install the dependencies by executing the following command:
 
 ```bash
-pip install -r --no-cache-dir test-requirements.txt
+pip install --no-cache-dir -r test-requirements.txt
 ```
 
 2. Execute the cells in the notebook to test the embeddings endpoint.
