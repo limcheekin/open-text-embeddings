@@ -69,7 +69,8 @@ def _create_embedding(
         }
         print("encode_kwargs", encode_kwargs)
         if "e5" in model_name:
-            embeddings = E5Embeddings(encode_kwargs=encode_kwargs)
+            embeddings = E5Embeddings(
+                model_name=model_name, encode_kwargs=encode_kwargs)
         else:
             embeddings = HuggingFaceEmbeddings(
                 model_name=model_name, encode_kwargs=encode_kwargs)
