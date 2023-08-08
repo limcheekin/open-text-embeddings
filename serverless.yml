@@ -12,6 +12,8 @@ provider:
       appimage:
         path: ./
         file: Dockerfile
+        buildArgs:
+          MODEL: ${env:MODEL}
   stage: dev
   region: ap-southeast-1
   iam:
@@ -26,8 +28,6 @@ functions:
   embeddings:
     image:
       name: appimage
-      buildArgs:
-        MODEL: ${env:MODEL}
     memorySize: ${env:MEMORY_SIZE}
     environment:
       MODEL: ${env:MODEL}
