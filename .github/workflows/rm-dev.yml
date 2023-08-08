@@ -1,6 +1,6 @@
 name: Remove Dev
-on: 
-  workflow_dispatch
+on:
+  workflow_dispatch:
     inputs:
       model_name:
         required: true
@@ -20,7 +20,7 @@ jobs:
       - name: Serverless AWS authentication
         run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Remove Lambda functions
-        run: > 
+        run: >
           SERVICE=$(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2)
           MODEL=${{ github.event.inputs.model_name }}
           MEMORY_SIZE=
