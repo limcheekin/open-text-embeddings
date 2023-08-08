@@ -17,10 +17,10 @@ pip install --no-cache-dir -r server-requirements.txt
 pip install --no-cache-dir uvicorn
 ```
 
-2. Run the server with the desired model using the following command:
+2. Run the server with the desired model using the following command which enabled normalize embeddings (Omit the `NORMALIZE_EMBEDDINGS` if the model don't support normalize embeddings):
 
 ```bash
-MODEL=intfloat/e5-large-v2 python -m open.text.embeddings.server
+MODEL=intfloat/e5-large-v2 NORMALIZE_EMBEDDINGS=1 python -m open.text.embeddings.server
 ```
 
 3. You will see the following text from your console once the server has started:
