@@ -33,7 +33,11 @@ jobs:
           NORMALIZE_EMBEDDINGS=${{ github.event.inputs.normalize_embeddings }}
           sls deploy
       - name: Export Endpoint URL
-        run: echo $(sls info --verbose | grep endpoint | sed s/endpoint\:\ //g | awk '{print $1}') > endpoint
+        run: >
+          echo $(SERVICE=$(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2) MODEL= MEMORY_SIZE= NORMALIZE_EMBEDDINGS= sls info --verbose | 
+          grep endpoint | 
+          sed s/endpoint\:\ //g | 
+          awk '{print $1}') > endpoint
       - name: Echo Endpoint URL
         run: echo $(cat endpoint)
       - name: Test Lambda functions
