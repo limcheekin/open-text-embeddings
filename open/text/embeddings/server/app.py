@@ -5,6 +5,7 @@ from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from langchain.embeddings import HuggingFaceEmbeddings
+from open.text.embeddings.huggingface import E5Embeddings
 import os
 
 router = APIRouter()
@@ -63,7 +64,15 @@ def _create_embedding(
         else:
             model_name = os.environ["MODEL"]
         print("Loading model:", model_name)
-        embeddings = HuggingFaceEmbeddings(model_name=model_name)
+        encode_kwargs = {
+            "normalize_embeddings": bool(os.environ.get("NORMALIZE_EMBEDDINGS", ""))
+        }
+        print("encode_kwargs", encode_kwargs)
+        if "e5" in model_name:
+            embeddings = E5Embeddings(encode_kwargs=encode_kwargs)
+        else:
+            embeddings = HuggingFaceEmbeddings(
+                model_name=model_name, encode_kwargs=encode_kwargs)
 
     if isinstance(request.input, str):
         return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(request.input))])

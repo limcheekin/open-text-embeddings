@@ -1,4 +1,4 @@
-service: open-text-embeddings
+service: ${env:SERVICE}
 
 frameworkVersion: "3"
 
@@ -26,9 +26,12 @@ functions:
   embeddings:
     image:
       name: appimage
-    memorySize: 5120
+      buildArgs:
+        MODEL: ${env:MODEL}
+    memorySize: ${env:MEMORY_SIZE}
     environment:
-      MODEL: intfloat/e5-large-v2
+      MODEL: ${env:MODEL}
+      NORMALIZE_EMBEDDINGS: ${env:NORMALIZE_EMBEDDINGS}
       TRANSFORMERS_CACHE: /tmp/transformer_cache
     timeout:
       900

@@ -1,5 +1,15 @@
 name: Deploy Dev
-on: workflow_dispatch
+on: 
+  workflow_dispatch
+    inputs:
+      model_name:
+        required: true
+        description: Model supported by sentence-transformers such as intfloat/e5-large-v2, sentence-transformers/all-MiniLM-L6-v2, sentence-transformers/all-mpnet-base-v2
+      memory_size:
+        required: true
+        description: Memory size of the lambda function
+      normalize_embeddings:
+        description: Enabled by specify any value, otherwise leave it blank
 
 jobs:
   deploy-dev:
@@ -7,8 +17,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-        with:
-          submodules: "true"
       - name: Setup NodeJS 18
         uses: actions/setup-node@v3
         with:
@@ -18,7 +26,12 @@ jobs:
       - name: Serverless AWS authentication
         run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Deploy Lambda functions
-        run: sls deploy
+        run: > 
+          SERVICE=$(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2)
+          MODEL=${{ github.event.inputs.model_name }}
+          MEMORY_SIZE=${{ github.event.inputs.memory_size }}
+          NORMALIZE_EMBEDDINGS=${{ github.event.inputs.normalize_embeddings }}
+          sls deploy
       - name: Export Endpoint URL
         run: echo $(sls info --verbose | grep endpoint | sed s/endpoint\:\ //g | awk '{print $1}') > endpoint
       - name: Echo Endpoint URL
