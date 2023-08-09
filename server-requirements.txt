@@ -3,3 +3,4 @@ sse-starlette
 mangum
 sentence_transformers
 langchain
+InstructorEmbedding
