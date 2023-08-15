@@ -2,9 +2,21 @@
 
 Many open source projects support the compatibility of the `completions` and the `chat/completions` endpoints of the OpenAI API, but do not support the `embeddings` endpoint.
 
-The goal of this project is to create an OpenAI API-compatible version of the `embeddings` endpoint, which serves open source models such as `intfloat/e5-large-v2`, `sentence-transformers/all-MiniLM-L6-v2`, `sentence-transformers/all-mpnet-base-v2`, and other sentence-transformers models supported by the LangChain's [HuggingFaceEmbeddings](https://api.python.langchain.com/en/latest/embeddings/langchain.embeddings.huggingface.HuggingFaceEmbeddings.html) class.
+The goal of this project is to create an OpenAI API-compatible version of the `embeddings` endpoint, which serves open source sentence-transformers models and other models supported by the LangChain's [HuggingFaceEmbeddings](https://api.python.langchain.com/en/latest/embeddings/langchain.embeddings.huggingface.HuggingFaceEmbeddings.html) class.
 
 The code in this repository is a quick hack developed over the weekend. While it functions correctly, it is far from optimal. We appreciate your contributions to improve the code quality.
+
+## Supported Text Embeddings Models
+
+Below is a compilation of open-source models that are tested via the `embeddings` endpoint:
+
+- [BAAI/bge-large-en](https://huggingface.co/BAAI/bge-large-en)
+- [intfloat/e5-large-v2](https://huggingface.co/intfloat/e5-large-v2)
+- [sentence-transformers/all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
+- [sentence-transformers/all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2)
+- [universal-sentence-encoder-large/5](https://tfhub.dev/google/universal-sentence-encoder-large/5) (Please refer to the `universal_sentence_encoder` branch for more details)
+
+The models mentioned above have undergone personal testing and verification. It is worth noting that all sentence-transformers models are expected to perform seamlessly with the endpoint.
 
 ## Standalone FastAPI Server
 
