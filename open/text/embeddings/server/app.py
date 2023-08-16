@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.embeddings import HuggingFaceInstructEmbeddings
+from langchain.embeddings import HuggingFaceBgeEmbeddings
 import os
 
 router = APIRouter()
@@ -13,9 +14,7 @@ router = APIRouter()
 DEFAULT_MODEL_NAME = "intfloat/e5-large-v2"
 E5_EMBED_INSTRUCTION = "passage: "
 E5_QUERY_INSTRUCTION = "query: "
-BGE_EN_EMBED_INSTRUCTION = ""
 BGE_EN_QUERY_INSTRUCTION = "Represent this sentence for searching relevant passages: "
-BGE_ZH_EMBED_INSTRUCTION = ""
 BGE_ZH_QUERY_INSTRUCTION = "为这个句子生成表示以用于检索相关文章："
 
 
@@ -82,15 +81,13 @@ def _create_embedding(
                                                        query_instruction=E5_QUERY_INSTRUCTION,
                                                        encode_kwargs=encode_kwargs)
         elif model_name.startswith("BAAI/bge-") and model_name.endswith("-en"):
-            embeddings = HuggingFaceInstructEmbeddings(model_name=model_name,
-                                                       embed_instruction=BGE_EN_EMBED_INSTRUCTION,
-                                                       query_instruction=BGE_EN_QUERY_INSTRUCTION,
-                                                       encode_kwargs=encode_kwargs)
+            embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
+                                                    query_instruction=BGE_EN_QUERY_INSTRUCTION,
+                                                    encode_kwargs=encode_kwargs)
         elif model_name.startswith("BAAI/bge-") and model_name.endswith("-zh"):
-            embeddings = HuggingFaceInstructEmbeddings(model_name=model_name,
-                                                       embed_instruction=BGE_ZH_EMBED_INSTRUCTION,
-                                                       query_instruction=BGE_ZH_QUERY_INSTRUCTION,
-                                                       encode_kwargs=encode_kwargs)
+            embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
+                                                    query_instruction=BGE_ZH_QUERY_INSTRUCTION,
+                                                    encode_kwargs=encode_kwargs)
         else:
             embeddings = HuggingFaceEmbeddings(
                 model_name=model_name, encode_kwargs=encode_kwargs)
