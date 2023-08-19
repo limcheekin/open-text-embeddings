@@ -42,7 +42,7 @@ class CreateEmbeddingRequest(BaseModel):
     user: Optional[str]
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "input": "The food was delicious and the waiter...",
             }
@@ -82,12 +82,12 @@ def _create_embedding(
                                                        encode_kwargs=encode_kwargs)
         elif model_name.startswith("BAAI/bge-") and model_name.endswith("-en"):
             embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
-                                                    query_instruction=BGE_EN_QUERY_INSTRUCTION,
-                                                    encode_kwargs=encode_kwargs)
+                                                  query_instruction=BGE_EN_QUERY_INSTRUCTION,
+                                                  encode_kwargs=encode_kwargs)
         elif model_name.startswith("BAAI/bge-") and model_name.endswith("-zh"):
             embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
-                                                    query_instruction=BGE_ZH_QUERY_INSTRUCTION,
-                                                    encode_kwargs=encode_kwargs)
+                                                  query_instruction=BGE_ZH_QUERY_INSTRUCTION,
+                                                  encode_kwargs=encode_kwargs)
         else:
             embeddings = HuggingFaceEmbeddings(
                 model_name=model_name, encode_kwargs=encode_kwargs)
