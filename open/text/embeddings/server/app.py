@@ -42,7 +42,7 @@ class CreateEmbeddingRequest(BaseModel):
     user: Optional[str]
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "input": "The food was delicious and the waiter...",
             }
@@ -61,13 +61,14 @@ embeddings = None
 
 
 def _create_embedding(
-    request: CreateEmbeddingRequest
+    model: Optional[str],
+    input: Union[str, List[str]]
 ):
     global embeddings
 
     if embeddings is None:
-        if request.model and request.model != "text-embedding-ada-002":
-            model_name = request.model
+        if model and model != "text-embedding-ada-002":
+            model_name = model
         else:
             model_name = os.environ["MODEL"]
         print("Loading model:", model_name)
@@ -92,11 +93,11 @@ def _create_embedding(
             embeddings = HuggingFaceEmbeddings(
                 model_name=model_name, encode_kwargs=encode_kwargs)
 
-    if isinstance(request.input, str):
-        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(request.input))])
+    if isinstance(input, str):
+        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input))])
     else:
         data = [Embedding(embedding=embedding)
-                for embedding in embeddings.embed_documents(request.input)]
+                for embedding in embeddings.embed_documents(input)]
         return CreateEmbeddingResponse(data=data)
 
 
@@ -107,8 +108,6 @@ def _create_embedding(
 async def create_embedding(
     request: CreateEmbeddingRequest
 ):
-    #    return _create_embedding(request)
-    #    throw TypeError: 'CreateEmbeddingResponse' object is not callable?
     return await run_in_threadpool(
-        _create_embedding, **request.model_dump(exclude={"user"})
+        _create_embedding, **request.dict(exclude={"user"})
     )

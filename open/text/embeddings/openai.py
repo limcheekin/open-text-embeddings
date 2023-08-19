@@ -24,6 +24,7 @@ class OpenAIEmbeddings(BaseModel, Embeddings):
     model_name: str = DEFAULT_MODEL_NAME
     """Model name to use."""
     openai_api_base: str
+    openai_api_key: Optional[str]
 
     def __init__(self, **kwargs: Any):
         """Initialize the OpenAIEmbeddings"""
@@ -57,7 +58,8 @@ class OpenAIEmbeddings(BaseModel, Embeddings):
         embeddings = self.client.create(
             model=self.model_name,
             input=texts,
-            api_base=self.openai_api_base
+            api_base=self.openai_api_base,
+            api_key=self.openai_api_key,
         )
         return [item["embedding"] for item in embeddings['data']]
 
@@ -74,6 +76,7 @@ class OpenAIEmbeddings(BaseModel, Embeddings):
         embeddings = self.client.create(
             model=self.model_name,
             input=text,
-            api_base=self.openai_api_base
+            api_base=self.openai_api_base,
+            api_key=self.openai_api_key,
         )
         return embeddings['data'][0]['embedding']
