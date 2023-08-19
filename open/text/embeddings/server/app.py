@@ -41,12 +41,15 @@ class CreateEmbeddingRequest(BaseModel):
     input: Union[str, List[str]] = Field(description="The input to embed.")
     user: Optional[str]
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "input": "The food was delicious and the waiter...",
-            }
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "input": "The food was delicious and the waiter...",
+                }
+            ]
         }
+    }
 
 
 class Embedding(BaseModel):
@@ -107,8 +110,8 @@ def _create_embedding(
 async def create_embedding(
     request: CreateEmbeddingRequest
 ):
-    return _create_embedding(request)
-#    throw TypeError: 'CreateEmbeddingResponse' object is not callable?
-#    return await run_in_threadpool(
-#        _create_embedding(request)
-#    )
+    #    return _create_embedding(request)
+    #    throw TypeError: 'CreateEmbeddingResponse' object is not callable?
+    return await run_in_threadpool(
+        _create_embedding, **request.model_dump(exclude={"user"})
+    )
