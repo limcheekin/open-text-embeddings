@@ -20,11 +20,11 @@ class OpenAIEmbeddings(BaseModel, Embeddings):
             embeddings = OpenAIEmbeddings()
     """
 
-    client: Any  #: :meta private:
+    client: Any = None  #: :meta private:
     model_name: str = DEFAULT_MODEL_NAME
     """Model name to use."""
     openai_api_base: str
-    openai_api_key: Optional[str]
+    openai_api_key: Optional[str] = None
 
     def __init__(self, **kwargs: Any):
         """Initialize the OpenAIEmbeddings"""

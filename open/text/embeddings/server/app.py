@@ -39,7 +39,20 @@ class CreateEmbeddingRequest(BaseModel):
     model: Optional[str] = Field(
         description="The model to use for generating embeddings.")
     input: Union[str, List[str]] = Field(description="The input to embed.")
-    user: Optional[str]
+    user: Optional[str] = Field(default=None)
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "input": "The food was delicious and the waiter...",
+                }
+            ]
+        }
+    }
+
+
+"""    user: Optional[str] = None
 
     class Config:
         json_schema_extra = {
@@ -47,6 +60,7 @@ class CreateEmbeddingRequest(BaseModel):
                 "input": "The food was delicious and the waiter...",
             }
         }
+"""
 
 
 class Embedding(BaseModel):
