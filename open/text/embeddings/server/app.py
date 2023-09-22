@@ -112,5 +112,5 @@ async def create_embedding(
     request: CreateEmbeddingRequest
 ):
     return await run_in_threadpool(
-        _create_embedding, **request.dict(exclude={"user"})
+        _create_embedding, **request.dict(exclude={"user", "model_config"})
     )
