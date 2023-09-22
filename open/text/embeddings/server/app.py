@@ -8,6 +8,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.embeddings import HuggingFaceBgeEmbeddings
 import os
+import torch
 
 router = APIRouter()
 
@@ -70,6 +71,12 @@ def _create_embedding(
     global embeddings
 
     if embeddings is None:
+        if "DEVICE" in os.environ:
+            device = os.environ["DEVICE"]
+        else:
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print("Using device:", device)
+
         if model and model != "text-embedding-ada-002":
             model_name = model
         else:
@@ -83,18 +90,22 @@ def _create_embedding(
             embeddings = HuggingFaceInstructEmbeddings(model_name=model_name,
                                                        embed_instruction=E5_EMBED_INSTRUCTION,
                                                        query_instruction=E5_QUERY_INSTRUCTION,
-                                                       encode_kwargs=encode_kwargs)
+                                                       encode_kwargs=encode_kwargs,
+                                                       model_kwargs={"device": device})
         elif model_name.startswith("BAAI/bge-") and model_name.endswith("-en"):
             embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
                                                   query_instruction=BGE_EN_QUERY_INSTRUCTION,
-                                                  encode_kwargs=encode_kwargs)
+                                                  encode_kwargs=encode_kwargs,
+                                                  model_kwargs={"device": device})
         elif model_name.startswith("BAAI/bge-") and model_name.endswith("-zh"):
             embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
                                                   query_instruction=BGE_ZH_QUERY_INSTRUCTION,
-                                                  encode_kwargs=encode_kwargs)
+                                                  encode_kwargs=encode_kwargs,
+                                                  model_kwargs={"device": device})
         else:
-            embeddings = HuggingFaceEmbeddings(
-                model_name=model_name, encode_kwargs=encode_kwargs)
+            embeddings = HuggingFaceEmbeddings(model_name=model_name,
+                                               encode_kwargs=encode_kwargs,
+                                               model_kwargs={"device": device})
 
     if isinstance(input, str):
         return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input))])
