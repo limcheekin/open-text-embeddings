@@ -17,9 +17,10 @@ Then visit http://localhost:8000/docs to see the interactive API docs.
 """
 import uvicorn
 import os
-from open.text.embeddings.server.app import create_app
+from open.text.embeddings.server.app import create_app, initialize_embeddings
 
 if __name__ == "__main__":
+    initialize_embeddings()
     app = create_app()
 
     uvicorn.run(
