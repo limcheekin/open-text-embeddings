@@ -20,6 +20,7 @@ BGE_ZH_QUERY_INSTRUCTION = "为这个句子生成表示以用于检索相关文�
 
 
 def create_app():
+    initialize_embeddings()
     app = FastAPI(
         title="Open Text Embeddings API",
         version="0.0.2",
@@ -63,7 +64,8 @@ class CreateEmbeddingResponse(BaseModel):
 
 embeddings = None
 
-def initialize_embeddings(model: Optional[str] = None):
+
+def initialize_embeddings():
     global embeddings
 
     if "DEVICE" in os.environ:
@@ -72,10 +74,7 @@ def initialize_embeddings(model: Optional[str] = None):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
 
-    if model and model != "text-embedding-ada-002":
-        model_name = model
-    else:
-        model_name = os.environ["MODEL"]
+    model_name = os.environ["MODEL"]
     print("Loading model:", model_name)
     encode_kwargs = {
         "normalize_embeddings": bool(os.environ.get("NORMALIZE_EMBEDDINGS", ""))
@@ -83,24 +82,24 @@ def initialize_embeddings(model: Optional[str] = None):
     print("encode_kwargs", encode_kwargs)
     if "e5" in model_name:
         embeddings = HuggingFaceInstructEmbeddings(model_name=model_name,
-                                                    embed_instruction=E5_EMBED_INSTRUCTION,
-                                                    query_instruction=E5_QUERY_INSTRUCTION,
-                                                    encode_kwargs=encode_kwargs,
-                                                    model_kwargs={"device": device})
+                                                   embed_instruction=E5_EMBED_INSTRUCTION,
+                                                   query_instruction=E5_QUERY_INSTRUCTION,
+                                                   encode_kwargs=encode_kwargs,
+                                                   model_kwargs={"device": device})
     elif model_name.startswith("BAAI/bge-") and model_name.endswith("-en"):
         embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
-                                                query_instruction=BGE_EN_QUERY_INSTRUCTION,
-                                                encode_kwargs=encode_kwargs,
-                                                model_kwargs={"device": device})
+                                              query_instruction=BGE_EN_QUERY_INSTRUCTION,
+                                              encode_kwargs=encode_kwargs,
+                                              model_kwargs={"device": device})
     elif model_name.startswith("BAAI/bge-") and model_name.endswith("-zh"):
         embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
-                                                query_instruction=BGE_ZH_QUERY_INSTRUCTION,
-                                                encode_kwargs=encode_kwargs,
-                                                model_kwargs={"device": device})
+                                              query_instruction=BGE_ZH_QUERY_INSTRUCTION,
+                                              encode_kwargs=encode_kwargs,
+                                              model_kwargs={"device": device})
     else:
         embeddings = HuggingFaceEmbeddings(model_name=model_name,
-                                            encode_kwargs=encode_kwargs,
-                                            model_kwargs={"device": device})
+                                           encode_kwargs=encode_kwargs,
+                                           model_kwargs={"device": device})
 
 
 def _create_embedding(input: Union[str, List[str]]):
@@ -122,5 +121,5 @@ async def create_embedding(
     request: CreateEmbeddingRequest
 ):
     return await run_in_threadpool(
-        _create_embedding, **request.dict(exclude={"user", "model", "model_config"})
+        _create_embedding, **request.model_dump(exclude={"user", "model", "model_config"})
     )
