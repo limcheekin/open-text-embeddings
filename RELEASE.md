@@ -1,3 +1,3 @@
-1.0.1 released.
+1.0.2 released.
 
-Fixed readme and package publishing workflow, no changes to code.
+Fixed "This filename has already been used, use a different version. See https://pypi.org/help/#file-name-reuse for more information."
