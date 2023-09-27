@@ -1,3 +1,3 @@
-1.0.2 released.
+1.0.1 released.
 
-Unable to publish using trust publisher approach, use api token.
+Fixed readme and package publishing workflow, no changes to code.
