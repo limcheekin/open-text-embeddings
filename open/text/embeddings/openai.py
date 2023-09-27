@@ -44,6 +44,7 @@ class OpenAIEmbeddings(BaseModel, Embeddings):
         """Configuration for this pydantic object."""
 
         extra = Extra.forbid
+        protected_namespaces = ()
 
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         """Compute doc embeddings using underlying model of llama-cpp-python.
