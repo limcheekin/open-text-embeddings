@@ -25,8 +25,7 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
 1. Install the dependencies by executing the following commands:
 
    ```bash
-   pip install --no-cache-dir -r server-requirements.txt
-   pip install --no-cache-dir uvicorn
+   pip install --no-cache-dir open-text-embeddings[server]
    ```
 
 2. Run the server with the desired model using the following command which enabled normalize embeddings (Omit the `NORMALIZE_EMBEDDINGS` if the model don't support normalize embeddings):
@@ -56,20 +55,22 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
 
 To deploy the embeddings endpoint as an AWS Lambda Function using GitHub Actions, follow these steps:
 
-1. Add your AWS credentials (`AWS_KEY` and `AWS_SECRET`) to the repository secrets. You can do this by navigating to https://github.com/username/open-text-embeddings/settings/secrets/actions.
+1. [Fork](https://github.com/limcheekin/open-text-embeddings/fork) the repo.
 
-2. Manually trigger the `Deploy Dev` or `Remove Dev` GitHub Actions to deploy or remove the AWS Lambda Function.
+2. Add your AWS credentials (`AWS_KEY` and `AWS_SECRET`) to the repository secrets. You can do this by navigating to https://github.com/username/open-text-embeddings/settings/secrets/actions.
+
+3. Manually trigger the `Deploy Dev` or `Remove Dev` GitHub Actions to deploy or remove the AWS Lambda Function.
 
 ## Testing the Embeddings Endpoint
 
-To test the embeddings endpoint, this repository includes an `embeddings.ipynb` notebook with a LangChain-compatible `OpenAIEmbeddings` class.
+To test the embeddings endpoint, the repository includes an [embeddings.ipynb](https://github.com/limcheekin/open-text-embeddings/blob/main/embeddings.ipynb) notebook with a LangChain-compatible `OpenAIEmbeddings` class.
 
 To get started:
 
 1. Install the dependencies by executing the following command:
 
    ```bash
-   pip install --no-cache-dir -r test-requirements.txt
+   pip install --no-cache-dir open-text-embeddings openai tiktoken
    ```
 
 2. Execute the cells in the notebook to test the embeddings endpoint.

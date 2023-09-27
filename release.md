@@ -1,4 +1,3 @@
-1.0.0 released.
+1.0.1 released.
 
-Thank you very much for the following contributions:
-[Vokturz](https://github.com/Vokturz) contributed [#2](https://github.com/limcheekin/open-text-embeddings/pull/2): support for CPU/GPU choice and initialization before starting the app.
+Fixed readme and package publishing workflow, no changes to code.
