@@ -1,4 +1,4 @@
-from skbuild import setup
+from setuptools import setup
 
 from pathlib import Path
 
@@ -7,6 +7,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="open_text_embeddings",
+    url="https://github.com/limcheekin/open-text-embeddings",
     description="Open Source Text Embedding Models with OpenAI API-Compatible Endpoint",
     long_description=long_description,
     long_description_content_type="text/markdown",
