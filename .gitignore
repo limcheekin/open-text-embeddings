@@ -163,3 +163,7 @@ cython_debug/
 intfloat/
 universal-sentence-encoder-large/
 BAAI/
+
+# publishing files
+MANIFEST.in
+_skbuild/
