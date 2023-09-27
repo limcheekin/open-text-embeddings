@@ -76,4 +76,4 @@ To get started:
 
 ## Contributions
 
-@Vokturz contributed #2: support for CPU/GPU choice and initialization before starting the app.
+[Vokturz](https://github.com/Vokturz) contributed [#2](https://github.com/limcheekin/open-text-embeddings/pull/2): support for CPU/GPU choice and initialization before starting the app.
