@@ -19,14 +19,13 @@ RUN chmod +x *.sh && \
 
 # Stage 3 - final runtime image
 # Grab a fresh copy of the Python image
-FROM public.ecr.aws/lambda/python:3.10
+FROM public.ecr.aws/lambda/python:3.11
 
 ARG MODEL
 
-RUN mkdir -p ${MODEL} && mkdir -p open/text/embeddings 
+RUN mkdir -p ${MODEL}
 COPY --from=build-image ${MODEL} ${MODEL}
-COPY open/text/embeddings ./open/text/embeddings
-COPY server-requirements.txt ./
-RUN pip install --no-cache-dir -r server-requirements.txt
+RUN pip install --upgrade pip setuptools && \
+    pip install --no-cache-dir open-text-embeddings[server] mangum
 
 CMD [ "open.text.embeddings.server.aws.handler" ]
