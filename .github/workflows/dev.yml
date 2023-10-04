@@ -15,7 +15,6 @@ jobs:
   deploy-dev:
     runs-on: ubuntu-latest
     env:
-      SERVICE: $(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2 | tr '.' '-')
       MODEL: ${{ github.event.inputs.model_name }}
       MEMORY_SIZE: ${{ github.event.inputs.memory_size }}
       NORMALIZE_EMBEDDINGS: ${{ github.event.inputs.normalize_embeddings }}
@@ -32,10 +31,12 @@ jobs:
       - name: Serverless AWS authentication
         run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Deploy Lambda functions
-        run: sls deploy
+        run: >
+          SERVICE=$(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2 | tr '.' '-')
+          sls deploy
       - name: Export Endpoint URL
         run: >
-          echo $(sls info --verbose | 
+          echo $(SERVICE=$(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2 | tr '.' '-') sls info --verbose | 
           grep endpoint | 
           sed s/endpoint\:\ //g | 
           awk '{print $1}') > endpoint

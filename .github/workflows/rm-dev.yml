@@ -21,7 +21,7 @@ jobs:
         run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Remove Lambda functions
         run: >
-          SERVICE=$(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2)
+          SERVICE=$(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2 | tr '.' '-')
           MODEL=${{ github.event.inputs.model_name }}
           MEMORY_SIZE=128
           NORMALIZE_EMBEDDINGS=
