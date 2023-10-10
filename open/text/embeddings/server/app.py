@@ -10,6 +10,8 @@ from langchain.embeddings import HuggingFaceBgeEmbeddings
 import os
 import torch
 
+from open.text.embeddings.server.gzip import GZipRequestMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 router = APIRouter()
 
 DEFAULT_MODEL_NAME = "intfloat/e5-large-v2"
@@ -23,7 +25,7 @@ def create_app():
     initialize_embeddings()
     app = FastAPI(
         title="Open Text Embeddings API",
-        version="1.0.0",
+        version="1.0.2",
     )
     app.add_middleware(
         CORSMiddleware,
@@ -32,6 +34,12 @@ def create_app():
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    app.add_middleware(GZipRequestMiddleware)
+
+    # handling gzip response only
+    app.add_middleware(GZipMiddleware, minimum_size=1000)
+
     app.include_router(router)
 
     return app

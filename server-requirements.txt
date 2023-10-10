@@ -1,5 +1,4 @@
 fastapi
-sse-starlette
 mangum
 sentence_transformers
 langchain
