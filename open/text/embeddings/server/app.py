@@ -84,10 +84,11 @@ def initialize_embeddings():
 
     model_name = os.environ["MODEL"]
     print("Loading model:", model_name)
+    normalize_embeddings = bool(os.environ.get("NORMALIZE_EMBEDDINGS", ""))
     encode_kwargs = {
-        "normalize_embeddings": bool(os.environ.get("NORMALIZE_EMBEDDINGS", ""))
+        "normalize_embeddings": normalize_embeddings
     }
-    print("encode_kwargs", encode_kwargs)
+    print("Normalize embeddings:", normalize_embeddings)
     if "e5" in model_name:
         embeddings = HuggingFaceInstructEmbeddings(model_name=model_name,
                                                    embed_instruction=E5_EMBED_INSTRUCTION,
