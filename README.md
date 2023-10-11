@@ -1,13 +1,14 @@
-# Open Source Text Embedding Models with OpenAI API-Compatible Endpoint
+# open-text-embeddings
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![PyPI](https://img.shields.io/pypi/v/open-text-embeddings)](https://pypi.org/project/open-text-embeddings/)
+[![Open in Colab](https://camo.githubusercontent.com/84f0493939e0c4de4e6dbe113251b4bfb5353e57134ffd9fcab6b8714514d4d1/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667)](https://colab.research.google.com/drive/1wfgfkt6xk3meSF5jWHDMqo6mL0ZvPw2f?usp=sharing)
 [![Publish Python Package](https://github.com/limcheekin/open-text-embeddings/actions/workflows/publish.yml/badge.svg)](https://github.com/limcheekin/open-text-embeddings/actions/workflows/publish.yml)
 
 Many open source projects support the compatibility of the `completions` and the `chat/completions` endpoints of the OpenAI API, but do not support the `embeddings` endpoint.
 
 The goal of this project is to create an OpenAI API-compatible version of the `embeddings` endpoint, which serves open source sentence-transformers models and other models supported by the LangChain's [HuggingFaceEmbeddings](https://api.python.langchain.com/en/latest/embeddings/langchain.embeddings.huggingface.HuggingFaceEmbeddings.html), HuggingFaceInstructEmbeddings and HuggingFaceBgeEmbeddings class.
 
-## Supported Text Embeddings Models
+## ℹ️ Supported Text Embeddings Models
 
 Below is a compilation of open-source models that are tested via the `embeddings` endpoint:
 
@@ -17,9 +18,15 @@ Below is a compilation of open-source models that are tested via the `embeddings
 - [sentence-transformers/all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2)
 - [universal-sentence-encoder-large/5](https://tfhub.dev/google/universal-sentence-encoder-large/5) (Please refer to the `universal_sentence_encoder` branch for more details)
 
-The models mentioned above have undergone personal testing and verification. It is worth noting that all sentence-transformers models are expected to perform seamlessly with the endpoint.
+The models mentioned above have undergone testing and verification. It is worth noting that all sentence-transformers models are expected to perform seamlessly with the endpoint.
 
-## Standalone FastAPI Server
+## 🔍 Demo
+
+Try out open-text-embeddings in your browser:
+
+[![Open in Colab](https://camo.githubusercontent.com/84f0493939e0c4de4e6dbe113251b4bfb5353e57134ffd9fcab6b8714514d4d1/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667)](https://colab.research.google.com/drive/1wfgfkt6xk3meSF5jWHDMqo6mL0ZvPw2f?usp=sharing)
+
+## 🖥️ Standalone FastAPI Server
 
 To run the embeddings endpoint locally as a standalone FastAPI server, follow these steps:
 
@@ -52,7 +59,7 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
    INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
    ```
 
-## AWS Lambda Function
+## ☁️ AWS Lambda Function
 
 To deploy the embeddings endpoint as an AWS Lambda Function using GitHub Actions, follow these steps:
 
@@ -62,22 +69,52 @@ To deploy the embeddings endpoint as an AWS Lambda Function using GitHub Actions
 
 3. Manually trigger the `Deploy Dev` or `Remove Dev` GitHub Actions to deploy or remove the AWS Lambda Function.
 
-## Testing the Embeddings Endpoint
+## 🧪 Testing the Embeddings Endpoint
 
-To test the embeddings endpoint, the repository includes an [embeddings.ipynb](https://github.com/limcheekin/open-text-embeddings/blob/main/embeddings.ipynb) notebook with a LangChain-compatible `OpenAIEmbeddings` class.
+To test the `embeddings` endpoint, the repository includes an [embeddings.ipynb](https://github.com/limcheekin/open-text-embeddings/blob/main/embeddings.ipynb) notebook with a LangChain-compatible `OpenAIEmbeddings` class.
 
 To get started:
 
 1. Install the dependencies by executing the following command:
 
    ```bash
-   pip install --no-cache-dir open-text-embeddings openai tiktoken
+   pip install --no-cache-dir open-text-embeddings openai
    ```
 
 2. Execute the cells in the notebook to test the embeddings endpoint.
 
-## Contributions
+## ❓ Known Issues
+
+1. Gzip compression for web request doesn't seems working in AWS Lambda Function.
+
+## 🧑‍💼 Contributing
+
+Contributions are welcome! Please check out the issues on the repository, and feel free to open a pull request.
+For more information, please see the [contributing guidelines](CONTRIBUTING.md).
+
+<a href="https://github.com/limcheekin/open-text-embeddings/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=limcheekin/open-text-embeddings" />
+</a>
 
 Thank you very much for the following contributions:
 
 - [Vokturz](https://github.com/Vokturz) contributed [#2](https://github.com/limcheekin/open-text-embeddings/pull/2): support for CPU/GPU choice and initialization before starting the app.
+
+## 📔 License
+
+This project is licensed under the terms of the MIT license.
+
+## 🗒️ Citation
+
+If you utilize this repository, please consider citing it with:
+
+```
+@misc{open-text-embeddings,
+  author = {Lim Chee Kin},
+  title = {open-text-embeddings: Open Source Text Embedding Models with OpenAI API-Compatible Endpoint},
+  year = {2023},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/limcheekin/open-text-embeddings}},
+}
+```
