@@ -1,8 +1,7 @@
-# Created by ChatGPT (GPT-3.5)
+# Created with the help of the ChatGPT (GPT-3.5)
 # REF: https://chat.openai.com/share/4ab741e7-8059-4be1-b3da-46b8e78d98cc
 # REF: https://gealber.com/gzip-middleware-fastapi
 import gzip
-import json
 from starlette.types import Message
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -15,7 +14,7 @@ class GZipRequestMiddleware(BaseHTTPMiddleware):
         content_encoding = request.headers.get('Content-Encoding', '').lower()
         print("content_encoding", content_encoding)
         if 'gzip' in content_encoding:
-            print("receive_", receive_)
+            # print("receive_", receive_)
 
             try:
                 content_length = int(
@@ -27,12 +26,10 @@ class GZipRequestMiddleware(BaseHTTPMiddleware):
                         status_code=400,
                     )
                 json_byte_string = gzip.decompress(body)
-                # json_string = json_byte_string.decode('utf-8')
-                # json_object = json.dumps(json_string)
                 receive_['body'] = json_byte_string
                 print("content_length", content_length)
-                print("body", body)
-                print("receive_['body']", receive_['body'])
+                # print("body", body)
+                print("gzip decompressed body:", receive_['body'])
             except ValueError:
                 return JSONResponse(
                     content={"error": "Invalid Content-Length header"},
