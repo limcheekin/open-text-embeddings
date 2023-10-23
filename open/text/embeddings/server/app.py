@@ -139,7 +139,7 @@ def _create_embedding(input: Union[str, List[str]]):
         return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input),
                                                        object="embedding", index=0)],
                                        model=model_name_short, object='list',
-                                       usage=Usage(prompt_tokens=0, total_tokens=len(tokens)))
+                                       usage=Usage(prompt_tokens=len(tokens), total_tokens=len(tokens)))
     else:
         data = []
         total_tokens = 0
@@ -147,7 +147,7 @@ def _create_embedding(input: Union[str, List[str]]):
             data.append(Embedding(embedding=embeddings.embed_query(embedding), object="embedding", index=i))
             total_tokens += len(tokenizer.tokenize(embedding))
         return CreateEmbeddingResponse(data=data, model=model_name_short, object='list',
-                                       usage=Usage(prompt_tokens=0, total_tokens=total_tokens))
+                                       usage=Usage(prompt_tokens=total_tokens, total_tokens=total_tokens))
 
 
 @router.post(
