@@ -102,12 +102,12 @@ def initialize_embeddings():
                                                    query_instruction=E5_QUERY_INSTRUCTION,
                                                    encode_kwargs=encode_kwargs,
                                                    model_kwargs={"device": device})
-    elif model_name.startswith("BAAI/bge-") and model_name.endswith("-en"):
+    elif "bge-" in model_name and "-en" in model_name:
         embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
                                               query_instruction=BGE_EN_QUERY_INSTRUCTION,
                                               encode_kwargs=encode_kwargs,
                                               model_kwargs={"device": device})
-    elif model_name.startswith("BAAI/bge-") and model_name.endswith("-zh"):
+    elif "bge-" in model_name and "-zh" in model_name:
         embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
                                               query_instruction=BGE_ZH_QUERY_INSTRUCTION,
                                               encode_kwargs=encode_kwargs,
