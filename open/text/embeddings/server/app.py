@@ -64,6 +64,8 @@ class CreateEmbeddingRequest(BaseModel):
 
 class Embedding(BaseModel):
     embedding: List[float]
+    object: str
+    index: int
 
 
 class Usage(BaseModel):
@@ -129,11 +131,13 @@ def _create_embedding(input: Union[str, List[str]]):
     model_name_short = model_name.split("/")[-1]
     if isinstance(input, str):
         return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input))],
+        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input),
+                                                       object="embedding", index=0)],
                                        model=model_name_short, object='list',
                                        usage=Usage(prompt_tokens=5, total_tokens=5))
     else:
-        data = [Embedding(embedding=embedding)
-                for embedding in embeddings.embed_documents(input)]
+        data = [Embedding(embedding=embedding, object="embedding", index=i)
+                for i, embedding in enumerate(embeddings.embed_documents(input))]
         return CreateEmbeddingResponse(data=data, model=model_name_short, object='list',
                                        usage=Usage(prompt_tokens=5, total_tokens=5))
 
