@@ -3,3 +3,4 @@ mangum
 sentence_transformers
 langchain
 InstructorEmbedding
+uvicorn
