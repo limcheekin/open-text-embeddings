@@ -91,7 +91,7 @@ def initialize_embeddings():
 
     model_name = os.environ["MODEL"]
     print("Loading model:", model_name)
-    normalize_embeddings = bool(os.environ.get("NORMALIZE_EMBEDDINGS", ""))
+    normalize_embeddings = bool(os.environ.get("NORMALIZE_EMBEDDINGS", "1"))
     encode_kwargs = {
         "normalize_embeddings": normalize_embeddings
     }
