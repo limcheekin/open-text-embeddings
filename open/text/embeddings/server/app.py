@@ -12,6 +12,8 @@ import torch
 from open.text.embeddings.server.gzip import GZipRequestMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 import pydantic
+from transformers import AutoTokenizer
+
 router = APIRouter()
 
 DEFAULT_MODEL_NAME = "intfloat/e5-large-v2"
@@ -82,9 +84,11 @@ class CreateEmbeddingResponse(BaseModel):
 
 embeddings = None
 
+tokenizer = None
 
 def initialize_embeddings():
     global embeddings
+    global tokenizer
 
     if "DEVICE" in os.environ:
         device = os.environ["DEVICE"]
@@ -101,6 +105,7 @@ def initialize_embeddings():
         "normalize_embeddings": normalize_embeddings
     }
     print("Normalize embeddings:", normalize_embeddings)
+    tokenizer=AutoTokenizer.from_pretrained(model_name)
     if "e5" in model_name:
         embeddings = HuggingFaceInstructEmbeddings(model_name=model_name,
                                                    embed_instruction=E5_EMBED_INSTRUCTION,
@@ -130,16 +135,19 @@ def _create_embedding(input: Union[str, List[str]]):
         model_name = DEFAULT_MODEL_NAME
     model_name_short = model_name.split("/")[-1]
     if isinstance(input, str):
-        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input))],
+        tokens = tokenizer.tokenize(input)
         return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input),
                                                        object="embedding", index=0)],
                                        model=model_name_short, object='list',
-                                       usage=Usage(prompt_tokens=5, total_tokens=5))
+                                       usage=Usage(prompt_tokens=0, total_tokens=len(tokens)))
     else:
-        data = [Embedding(embedding=embedding, object="embedding", index=i)
-                for i, embedding in enumerate(embeddings.embed_documents(input))]
+        data = []
+        total_tokens = 0
+        for i, embedding in enumerate(input):
+            data.append(Embedding(embedding=embeddings.embed_query(embedding), object="embedding", index=i))
+            total_tokens += len(tokenizer.tokenize(embedding))
         return CreateEmbeddingResponse(data=data, model=model_name_short, object='list',
-                                       usage=Usage(prompt_tokens=5, total_tokens=5))
+                                       usage=Usage(prompt_tokens=0, total_tokens=total_tokens))
 
 
 @router.post(
