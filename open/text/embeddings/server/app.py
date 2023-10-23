@@ -89,7 +89,9 @@ def initialize_embeddings():
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
 
-    model_name = os.environ["MODEL"]
+    model_name = os.environ.get("MODEL")
+    if model_name is None:
+        model_name = DEFAULT_MODEL_NAME
     print("Loading model:", model_name)
     normalize_embeddings = bool(os.environ.get("NORMALIZE_EMBEDDINGS", "1"))
     encode_kwargs = {
@@ -120,13 +122,16 @@ def initialize_embeddings():
 
 def _create_embedding(input: Union[str, List[str]]):
     global embeddings
-
+    model_name = os.environ.get("MODEL")
+    if model_name is None:
+        model_name = DEFAULT_MODEL_NAME
+    model_name_short = model_name.split("/")[-1]
     if isinstance(input, str):
-        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input))])
+        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input))],model=model_name_short,object='list',usage=Usage(prompt_tokens=5,total_tokens=5))
     else:
         data = [Embedding(embedding=embedding)
                 for embedding in embeddings.embed_documents(input)]
-        return CreateEmbeddingResponse(data=data)
+        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input))],model=model_name_short,object='list',usage=Usage(prompt_tokens=5,total_tokens=5))
 
 
 @router.post(
