@@ -66,9 +66,15 @@ class CreateEmbeddingRequest(BaseModel):
 class Embedding(BaseModel):
     embedding: List[float]
 
+class Usage(BaseModel):
+    prompt_tokens: int
+    total_tokens: int
 
 class CreateEmbeddingResponse(BaseModel):
     data: List[Embedding]
+    model: str
+    object: str
+    usage: Usage
 
 
 embeddings = None
