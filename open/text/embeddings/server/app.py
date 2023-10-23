@@ -12,6 +12,7 @@ import torch
 
 from open.text.embeddings.server.gzip import GZipRequestMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+import pydantic
 router = APIRouter()
 
 DEFAULT_MODEL_NAME = "intfloat/e5-large-v2"
@@ -129,6 +130,11 @@ def _create_embedding(input: Union[str, List[str]]):
 async def create_embedding(
     request: CreateEmbeddingRequest
 ):
-    return await run_in_threadpool(
-        _create_embedding, **request.model_dump(exclude={"user", "model", "model_config"})
-    )
+    if pydantic.__version__ > '2.0.0' :
+        return await run_in_threadpool(
+            _create_embedding, **request.model_dump(exclude={"user", "model", "model_config"})
+        )
+    else :
+        return await run_in_threadpool(
+            _create_embedding, **request.dict(exclude={"user", "model", "model_config"})
+        )
