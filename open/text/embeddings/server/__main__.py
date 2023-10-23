@@ -22,6 +22,10 @@ from open.text.embeddings.server.app import create_app
 if __name__ == "__main__":
     app = create_app()
 
+    HOST = os.environ.get("HOST")  
+    if HOST is None:  
+        HOST = os.getenv("HOST", "0.0.0.0")
+
     uvicorn.run(
-        app, host=os.getenv("HOST", "localhost"), port=int(os.getenv("PORT", 8000))
+        app, host=HOST, port=int(os.getenv("PORT", 8000))
     )
