@@ -25,6 +25,7 @@ class OpenAIEmbeddings(BaseModel, Embeddings):
     """Model name to use."""
     openai_api_base: str
     openai_api_key: Optional[str] = None
+    openai_version: str = None  #: :meta private:
 
     def __init__(self, **kwargs: Any):
         """Initialize the OpenAIEmbeddings"""
@@ -38,7 +39,13 @@ class OpenAIEmbeddings(BaseModel, Embeddings):
                 "Please install it with `pip install openai`."
             ) from exc
 
-        self.client = openai.Embedding
+        self.openai_version = openai.__version__
+        if self.openai_version >= '1.0.0':
+            from openai import OpenAI
+            self.client = OpenAI(base_url=self.openai_api_base,
+                                 api_key=self.openai_api_key).embeddings
+        else:
+            self.client = openai.Embedding
 
     class Config:
         """Configuration for this pydantic object."""
@@ -56,13 +63,22 @@ class OpenAIEmbeddings(BaseModel, Embeddings):
             List of embeddings, one for each text.
         """
         texts = list(map(lambda x: x.replace("\n", " "), texts))
-        embeddings = self.client.create(
-            model=self.model_name,
-            input=texts,
-            api_base=self.openai_api_base,
-            api_key=self.openai_api_key,
-        )
-        return [item["embedding"] for item in embeddings['data']]
+        if self.openai_version >= '1.0.0':
+            embeddings = self.client.create(
+                model=self.model_name,
+                input=texts,
+            )
+        else:
+            embeddings = self.client.create(
+                model=self.model_name,
+                input=texts,
+                api_base=self.openai_api_base,
+                api_key=self.openai_api_key,
+            )
+        if self.openai_version >= '1.0.0':
+            return [item.embedding for item in embeddings.data]
+        else:
+            return [item["embedding"] for item in embeddings['data']]
 
     def embed_query(self, text: str) -> List[float]:
         """Compute query embeddings using underlying model of llama-cpp-python.
@@ -74,10 +90,19 @@ class OpenAIEmbeddings(BaseModel, Embeddings):
             Embeddings for the text.
         """
         text = text.replace("\n", " ")
-        embeddings = self.client.create(
-            model=self.model_name,
-            input=text,
-            api_base=self.openai_api_base,
-            api_key=self.openai_api_key,
-        )
-        return embeddings['data'][0]['embedding']
+        if self.openai_version >= '1.0.0':
+            embeddings = self.client.create(
+                model=self.model_name,
+                input=text,
+            )
+        else:
+            embeddings = self.client.create(
+                model=self.model_name,
+                input=text,
+                api_base=self.openai_api_base,
+                api_key=self.openai_api_key,
+            )
+        if self.openai_version >= '1.0.0':
+            return embeddings.data[0].embedding
+        else:
+            return embeddings['data'][0]['embedding']
