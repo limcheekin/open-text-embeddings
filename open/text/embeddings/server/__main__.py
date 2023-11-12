@@ -4,7 +4,6 @@ To run this example:
 
 ```bash
 pip install -r --no-cache-dir server-requirements.txt
-pip install --no-cache-dir uvicorn
 ```
 
 Then run:
@@ -22,10 +21,8 @@ from open.text.embeddings.server.app import create_app
 if __name__ == "__main__":
     app = create_app()
 
-    HOST = os.environ.get("HOST")  
-    if HOST is None:  
-        HOST = os.getenv("HOST", "0.0.0.0")
-
     uvicorn.run(
-        app, host=HOST, port=int(os.getenv("PORT", 8000))
+        app,
+        host=os.environ.get("HOST", "0.0.0.0"),
+        port=int(os.environ.get("PORT", 8000))
     )
