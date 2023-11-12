@@ -83,8 +83,14 @@ class CreateEmbeddingResponse(BaseModel):
 
 
 embeddings = None
-
 tokenizer = None
+
+
+def str_to_bool(s):
+    map = {'true': True, 'false': False, '1': True, '0': False}
+    if s.lower() not in map:
+        raise ValueError("Cannot convert {} to a bool".format(s))
+    return map[s.lower()]
 
 
 def initialize_embeddings():
@@ -101,7 +107,8 @@ def initialize_embeddings():
     if model_name is None:
         model_name = DEFAULT_MODEL_NAME
     print("Loading model:", model_name)
-    normalize_embeddings = bool(os.environ.get("NORMALIZE_EMBEDDINGS", "1"))
+    normalize_embeddings = str_to_bool(
+        os.environ.get("NORMALIZE_EMBEDDINGS", "1"))
     encode_kwargs = {
         "normalize_embeddings": normalize_embeddings
     }
