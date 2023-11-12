@@ -65,8 +65,8 @@ class CreateEmbeddingRequest(BaseModel):
 
 
 class Embedding(BaseModel):
-    embedding: List[float]
     object: str
+    embedding: List[float]
     index: int
 
 
@@ -76,9 +76,9 @@ class Usage(BaseModel):
 
 
 class CreateEmbeddingResponse(BaseModel):
+    object: str
     data: List[Embedding]
     model: str
-    object: str
     usage: Usage
 
 
