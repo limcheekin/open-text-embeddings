@@ -1,4 +1,3 @@
-
 from typing import List, Optional, Union
 from starlette.concurrency import run_in_threadpool
 from fastapi import FastAPI, APIRouter
@@ -12,6 +11,9 @@ import torch
 
 from open.text.embeddings.server.gzip import GZipRequestMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+import pydantic
+from transformers import AutoTokenizer
+
 router = APIRouter()
 
 DEFAULT_MODEL_NAME = "intfloat/e5-large-v2"
@@ -64,17 +66,29 @@ class CreateEmbeddingRequest(BaseModel):
 
 class Embedding(BaseModel):
     embedding: List[float]
+    object: str
+    index: int
+
+
+class Usage(BaseModel):
+    prompt_tokens: int
+    total_tokens: int
 
 
 class CreateEmbeddingResponse(BaseModel):
     data: List[Embedding]
+    model: str
+    object: str
+    usage: Usage
 
 
 embeddings = None
 
+tokenizer = None
 
 def initialize_embeddings():
     global embeddings
+    global tokenizer
 
     if "DEVICE" in os.environ:
         device = os.environ["DEVICE"]
@@ -82,25 +96,28 @@ def initialize_embeddings():
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
 
-    model_name = os.environ["MODEL"]
+    model_name = os.environ.get("MODEL")
+    if model_name is None:
+        model_name = DEFAULT_MODEL_NAME
     print("Loading model:", model_name)
-    normalize_embeddings = bool(os.environ.get("NORMALIZE_EMBEDDINGS", ""))
+    normalize_embeddings = bool(os.environ.get("NORMALIZE_EMBEDDINGS", "1"))
     encode_kwargs = {
         "normalize_embeddings": normalize_embeddings
     }
     print("Normalize embeddings:", normalize_embeddings)
+    tokenizer=AutoTokenizer.from_pretrained(model_name)
     if "e5" in model_name:
         embeddings = HuggingFaceInstructEmbeddings(model_name=model_name,
                                                    embed_instruction=E5_EMBED_INSTRUCTION,
                                                    query_instruction=E5_QUERY_INSTRUCTION,
                                                    encode_kwargs=encode_kwargs,
                                                    model_kwargs={"device": device})
-    elif model_name.startswith("BAAI/bge-") and model_name.endswith("-en"):
+    elif "bge-" in model_name and "-en" in model_name:
         embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
                                               query_instruction=BGE_EN_QUERY_INSTRUCTION,
                                               encode_kwargs=encode_kwargs,
                                               model_kwargs={"device": device})
-    elif model_name.startswith("BAAI/bge-") and model_name.endswith("-zh"):
+    elif "bge-" in model_name and "-zh" in model_name:
         embeddings = HuggingFaceBgeEmbeddings(model_name=model_name,
                                               query_instruction=BGE_ZH_QUERY_INSTRUCTION,
                                               encode_kwargs=encode_kwargs,
@@ -113,13 +130,24 @@ def initialize_embeddings():
 
 def _create_embedding(input: Union[str, List[str]]):
     global embeddings
-
+    model_name = os.environ.get("MODEL")
+    if model_name is None:
+        model_name = DEFAULT_MODEL_NAME
+    model_name_short = model_name.split("/")[-1]
     if isinstance(input, str):
-        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input))])
+        tokens = tokenizer.tokenize(input)
+        return CreateEmbeddingResponse(data=[Embedding(embedding=embeddings.embed_query(input),
+                                                       object="embedding", index=0)],
+                                       model=model_name_short, object='list',
+                                       usage=Usage(prompt_tokens=len(tokens), total_tokens=len(tokens)))
     else:
-        data = [Embedding(embedding=embedding)
-                for embedding in embeddings.embed_documents(input)]
-        return CreateEmbeddingResponse(data=data)
+        data = []
+        total_tokens = 0
+        for i, embedding in enumerate(input):
+            data.append(Embedding(embedding=embeddings.embed_query(embedding), object="embedding", index=i))
+            total_tokens += len(tokenizer.tokenize(embedding))
+        return CreateEmbeddingResponse(data=data, model=model_name_short, object='list',
+                                       usage=Usage(prompt_tokens=total_tokens, total_tokens=total_tokens))
 
 
 @router.post(
@@ -127,8 +155,13 @@ def _create_embedding(input: Union[str, List[str]]):
     response_model=CreateEmbeddingResponse,
 )
 async def create_embedding(
-    request: CreateEmbeddingRequest
+        request: CreateEmbeddingRequest
 ):
-    return await run_in_threadpool(
-        _create_embedding, **request.model_dump(exclude={"user", "model", "model_config"})
-    )
+    if pydantic.__version__ > '2.0.0':
+        return await run_in_threadpool(
+            _create_embedding, **request.model_dump(exclude={"user", "model", "model_config"})
+        )
+    else:
+        return await run_in_threadpool(
+            _create_embedding, **request.dict(exclude={"user", "model", "model_config"})
+        )
