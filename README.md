@@ -97,7 +97,7 @@ To deploy the embeddings endpoint as an AWS Lambda Function using GitHub Actions
 
 1. [Fork](https://github.com/limcheekin/open-text-embeddings/fork) the repo.
 
-2. Add your AWS credentials (`AWS_KEY` and `AWS_SECRET`) to the repository secrets. You can do this by navigating to https://github.com/<your-username>/open-text-embeddings/settings/secrets/actions.
+2. Add your AWS credentials (`AWS_KEY` and `AWS_SECRET`) to the repository secrets. You can do this by navigating to [https://github.com/your-username/open-text-embeddings/settings/secrets/actions]().
 
 3. Manually trigger the `Deploy Dev` or `Remove Dev` GitHub Actions to deploy or remove the AWS Lambda Function.
 
