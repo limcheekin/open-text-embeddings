@@ -1,3 +1,4 @@
-1.0.2 released.
-
-[#3](https://github.com/limcheekin/open-text-embeddings/issues/3) Added gzip compression to web request and response.
+- [jayxuz](https://github.com/jayxuz) contributed [#5](https://github.com/limcheekin/open-text-embeddings/pull/5): improved OpenAI API compatibility, better support for previous versions of Python (start from v3.7), better defaults and bug fixes.
+- Normalize embeddings enabled by default.
+- Added `VERBOSE` environment variable to support verbose logging, disabled by default.
+- Support `openai` package version >= 1.0.0.

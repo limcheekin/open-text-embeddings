@@ -47,5 +47,5 @@ jobs:
         run: echo $(cat endpoint)
       - name: Test Lambda functions
         run: |
-          "curl -X POST -H 'Content-Type: application/json' -d @text.json $(cat endpoint)v1/embeddings"
-          "./test.sh $(cat endpoint)v1/embeddings"
+          curl -X POST -H 'Content-Type: application/json' -d @text.json $(cat endpoint)v1/embeddings
+          ./test.sh $(cat endpoint)v1/embeddings

@@ -11,7 +11,7 @@ setup(
     description="Open Source Text Embedding Models with OpenAI API-Compatible Endpoint",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="1.0.2",
+    version="1.0.3",
     author="Lim Chee Kin",
     author_email="limcheekin@vobject.com",
     license="MIT",

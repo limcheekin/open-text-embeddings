@@ -20,6 +20,26 @@ Below is a compilation of open-source models that are tested via the `embeddings
 
 The models mentioned above have undergone testing and verification. It is worth noting that all sentence-transformers models are expected to perform seamlessly with the endpoint.
 
+It may not be immediately apparent that utilizing the `BAAI/bge-*` and `intfloat/e5-*` series of models with the `embeddings` endpoint can yield different embeddings for the same `input` value, depending on how it is sent to the `embeddings` endpoint. Consider the following examples:
+
+**Example 1:**
+
+```json
+{
+  "input": "The food was delicious and the waiter..."
+}
+```
+
+**Example 2:**
+
+```json
+{
+  "input": ["The food was delicious and the waiter..."]
+}
+```
+
+This discrepancy arises because the `BAAI/bge-*` and `intfloat/e5-*` series of models require the addition of specific prefix text to the `input` value before creating embeddings to achieve optimal performance. In the first example, where the `input` is of type `str`, it is assumed that the embeddings will be used for queries. Conversely, in the second example, where the `input` is of type `List[str]`, it is assumed that you will store the embeddings in a vector database. Adhering to these guidelines is essential to ensure the intended functionality and optimal performance of the models.
+
 ## 🔍 Demo
 
 Try out open-text-embeddings in your browser:
@@ -36,19 +56,31 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
    pip install --no-cache-dir open-text-embeddings[server]
    ```
 
-2. Run the server with the desired model using the following command which enabled normalize embeddings (Omit the `NORMALIZE_EMBEDDINGS` if the model don't support normalize embeddings):
+2. Run the server with the desired model using the following command which normalize embeddings is enabled by default:
 
    ```bash
-   MODEL=intfloat/e5-large-v2 NORMALIZE_EMBEDDINGS=1 python -m open.text.embeddings.server
+   MODEL=intfloat/e5-large-v2 python -m open.text.embeddings.server
+   ```
+
+   Set the `NORMALIZE_EMBEDDINGS` to `0` or `False` if the model doesn't support normalize embeddings, for example:
+
+   ```bash
+   MODEL=intfloat/e5-large-v2 NORMALIZE_EMBEDDINGS=0 python -m open.text.embeddings.server
    ```
 
    If a GPU is detected in the runtime environment, the server will automatically execute using the `cuba` mode. However, you have the flexibility to specify the `DEVICE` environment variable to choose between `cpu` and `cuba`. Here's an example of how to run the server with your desired configuration:
 
    ```bash
-   MODEL=intfloat/e5-large-v2 NORMALIZE_EMBEDDINGS=1 DEVICE=cpu python -m open.text.embeddings.server
+   MODEL=intfloat/e5-large-v2 DEVICE=cpu python -m open.text.embeddings.server
    ```
 
    This setup allows you to seamlessly switch between CPU and GPU modes, giving you control over the server's performance based on your specific requirements.
+
+   You can enabled verbose logging by setting the `VERBOSE` to `1`, for example:
+
+   ```bash
+   MODEL=intfloat/e5-large-v2 VERBOSE=1 python -m open.text.embeddings.server
+   ```
 
 3. You will see the following text from your console once the server has started:
 
@@ -56,7 +88,7 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
    INFO:     Started server process [19705]
    INFO:     Waiting for application startup.
    INFO:     Application startup complete.
-   INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+   INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
    ```
 
 ## ☁️ AWS Lambda Function
@@ -65,7 +97,7 @@ To deploy the embeddings endpoint as an AWS Lambda Function using GitHub Actions
 
 1. [Fork](https://github.com/limcheekin/open-text-embeddings/fork) the repo.
 
-2. Add your AWS credentials (`AWS_KEY` and `AWS_SECRET`) to the repository secrets. You can do this by navigating to https://github.com/username/open-text-embeddings/settings/secrets/actions.
+2. Add your AWS credentials (`AWS_KEY` and `AWS_SECRET`) to the repository secrets. You can do this by navigating to https://github.com/<your-username>/open-text-embeddings/settings/secrets/actions.
 
 3. Manually trigger the `Deploy Dev` or `Remove Dev` GitHub Actions to deploy or remove the AWS Lambda Function.
 
@@ -83,10 +115,6 @@ To get started:
 
 2. Execute the cells in the notebook to test the embeddings endpoint.
 
-## ❓ Known Issues
-
-1. Gzip compression for web request doesn't seems working in AWS Lambda Function.
-
 ## 🧑‍💼 Contributing
 
 Contributions are welcome! Please check out the issues on the repository, and feel free to open a pull request.
@@ -99,6 +127,7 @@ For more information, please see the [contributing guidelines](CONTRIBUTING.md).
 Thank you very much for the following contributions:
 
 - [Vokturz](https://github.com/Vokturz) contributed [#2](https://github.com/limcheekin/open-text-embeddings/pull/2): support for CPU/GPU choice and initialization before starting the app.
+- [jayxuz](https://github.com/jayxuz) contributed [#5](https://github.com/limcheekin/open-text-embeddings/pull/5): improved OpenAI API compatibility, better support for previous versions of Python (start from v3.7), better defaults and bug fixes.
 
 ## 📔 License
 
