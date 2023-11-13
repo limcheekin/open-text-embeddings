@@ -9,7 +9,7 @@ on:
         required: true
         description: Memory size of the lambda function
       normalize_embeddings:
-        description: Enabled normalize embeddings by specify any value, otherwise leave it blank
+        description: Enabled by default. You can disable it by specify "0" or "False"
 
 jobs:
   deploy-dev:
@@ -21,9 +21,9 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup NodeJS 18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
       - name: Install Serverless Framework
