@@ -32,6 +32,7 @@ functions:
     environment:
       MODEL: ${env:MODEL}
       NORMALIZE_EMBEDDINGS: ${env:NORMALIZE_EMBEDDINGS}
+      VERBOSE: ${env:VERBOSE}
       TRANSFORMERS_CACHE: /tmp/transformer_cache
     timeout:
       900

@@ -25,4 +25,5 @@ jobs:
           MODEL=${{ github.event.inputs.model_name }}
           MEMORY_SIZE=128
           NORMALIZE_EMBEDDINGS=
+          VERBOSE=
           sls remove
