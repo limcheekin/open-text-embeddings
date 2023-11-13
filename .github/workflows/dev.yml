@@ -9,9 +9,9 @@ on:
         required: true
         description: Memory size of the lambda function
       normalize_embeddings:
-        description: Enabled by default. You can disable it by specify "0" or "False"
+        description: Normalize embeddings enabled by default. Disable it by specify "0" or "False"
       verbose:
-        description: Enabled verbose logging in the console by specify any value, otherwise leave it blank
+        description: Verbose logging disabled by default. Enabled it by specify any value, otherwise leave it blank
 
 jobs:
   deploy-dev:
