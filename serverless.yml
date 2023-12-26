@@ -34,15 +34,6 @@ functions:
       NORMALIZE_EMBEDDINGS: ${env:NORMALIZE_EMBEDDINGS}
       VERBOSE: ${env:VERBOSE}
       HF_HOME: /tmp/hf_home
-    timeout:
-      900
-      # https://www.serverless.com/framework/docs/providers/aws/guide/functions#lambda-function-urls
-    url:
-      # Allow CORS for all requests from any origin
-      cors:
-        allowedOrigins:
-          - "*"
-          #- https://url1.com
-          #- https://url2.com
-        allowedMethods:
-          - POST
+    timeout: 900
+    # https://www.serverless.com/framework/docs/providers/aws/guide/functions#lambda-function-urls
+    url: true
