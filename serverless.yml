@@ -33,7 +33,7 @@ functions:
       MODEL: ${env:MODEL}
       NORMALIZE_EMBEDDINGS: ${env:NORMALIZE_EMBEDDINGS}
       VERBOSE: ${env:VERBOSE}
-      TRANSFORMERS_CACHE: /tmp/transformer_cache
+      HF_HOME: /tmp/hf_home
     timeout:
       900
       # https://www.serverless.com/framework/docs/providers/aws/guide/functions#lambda-function-urls
