@@ -19,7 +19,7 @@ jobs:
     env:
       MODEL: ${{ github.event.inputs.model_name }}
       MEMORY_SIZE: ${{ github.event.inputs.memory_size }}
-      NORMALIZE_EMBEDDINGS: ${{ github.event.inputs.normalize_embeddings }}
+      NORMALIZE_EMBEDDINGS: ${{ github.event.inputs.normalize_embeddings  || '1' }}
       VERBOSE: ${{ github.event.inputs.verbose }}
 
     steps:
