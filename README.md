@@ -101,6 +101,14 @@ To deploy the embeddings endpoint as an AWS Lambda Function using GitHub Actions
 
 3. Manually trigger the `Deploy Dev` or `Remove Dev` GitHub Actions to deploy or remove the AWS Lambda Function.
 
+## Modal Web endpoints
+
+To deploy the embeddings endpoint as an [Modal.com](https://modal.com/) Web endpoints using modal deploy, follow these steps:
+
+1. [Fork](https://github.com/limcheekin/open-text-embeddings/fork) the repo.
+
+2. Read the modal [documentation](https://modal.com/docs/examples), make sure the modal commands are available, and run `modal deploy open\text\embeddings\server\modal_web.py`.
+
 ## 🧪 Testing the Embeddings Endpoint
 
 To test the `embeddings` endpoint, the repository includes an [embeddings.ipynb](https://github.com/limcheekin/open-text-embeddings/blob/main/embeddings.ipynb) notebook with a LangChain-compatible `OpenAIEmbeddings` class.
