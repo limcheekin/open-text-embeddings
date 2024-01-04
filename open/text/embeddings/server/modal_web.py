@@ -22,4 +22,7 @@ volume = Volume.persisted("open-text-embeddings-volume")
 )
 @asgi_app()
 def modal_app():
+    """
+    Run the modal app.
+    """
     return create_app()
