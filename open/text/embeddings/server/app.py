@@ -51,6 +51,9 @@ class CreateEmbeddingRequest(BaseModel):
     model: Optional[str] = Field(
         description="The model to use for generating embeddings.", default=None)
     input: Union[str, List[str]] = Field(description="The input to embed.")
+    dimensions: Optional[int] = Field(
+        description="The number of dimensions the resulting output embeddings should have.",
+        default=None)
     user: Optional[str] = Field(default=None)
 
     model_config = {
@@ -167,9 +170,9 @@ async def create_embedding(
 ):
     if pydantic.__version__ > '2.0.0':
         return await run_in_threadpool(
-            _create_embedding, **request.model_dump(exclude={"user", "model", "model_config"})
+            _create_embedding, **request.model_dump(exclude={"user", "model", "model_config", "dimensions"})
         )
     else:
         return await run_in_threadpool(
-            _create_embedding, **request.dict(exclude={"user", "model", "model_config"})
+            _create_embedding, **request.dict(exclude={"user", "model", "model_config", "dimensions"})
         )
