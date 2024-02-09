@@ -1,7 +1,7 @@
 # open-text-embeddings
 
 [![PyPI](https://img.shields.io/pypi/v/open-text-embeddings)](https://pypi.org/project/open-text-embeddings/)
-[![Open in Colab](https://camo.githubusercontent.com/84f0493939e0c4de4e6dbe113251b4bfb5353e57134ffd9fcab6b8714514d4d1/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667)](https://colab.research.google.com/drive/1wfgfkt6xk3meSF5jWHDMqo6mL0ZvPw2f?usp=sharing)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1wfgfkt6xk3meSF5jWHDMqo6mL0ZvPw2f?usp=sharing)
 [![Publish Python Package](https://github.com/limcheekin/open-text-embeddings/actions/workflows/publish.yml/badge.svg)](https://github.com/limcheekin/open-text-embeddings/actions/workflows/publish.yml)
 
 Many open source projects support the compatibility of the `completions` and the `chat/completions` endpoints of the OpenAI API, but do not support the `embeddings` endpoint.
@@ -44,7 +44,7 @@ This discrepancy arises because the `BAAI/bge-*` and `intfloat/e5-*` series of m
 
 Try out open-text-embeddings in your browser:
 
-[![Open in Colab](https://camo.githubusercontent.com/84f0493939e0c4de4e6dbe113251b4bfb5353e57134ffd9fcab6b8714514d4d1/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667)](https://colab.research.google.com/drive/1wfgfkt6xk3meSF5jWHDMqo6mL0ZvPw2f?usp=sharing)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1wfgfkt6xk3meSF5jWHDMqo6mL0ZvPw2f?usp=sharing)
 
 ## 🖥️ Standalone FastAPI Server
 
@@ -56,7 +56,13 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
    pip install --no-cache-dir open-text-embeddings[server]
    ```
 
-2. Run the server with the desired model using the following command which normalize embeddings is enabled by default:
+2. Download the desired model using the following command, for example `intfloat/e5-large-v2`:
+
+   ```bash
+   ./download.sh intfloat/e5-large-v2
+   ```
+
+3. Run the server with the desired model using the following command which normalize embeddings is enabled by default:
 
    ```bash
    MODEL=intfloat/e5-large-v2 python -m open.text.embeddings.server
@@ -82,7 +88,7 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
    MODEL=intfloat/e5-large-v2 VERBOSE=1 python -m open.text.embeddings.server
    ```
 
-3. You will see the following text from your console once the server has started:
+4. You will see the following text from your console once the server has started:
 
    ```bash
    INFO:     Started server process [19705]
