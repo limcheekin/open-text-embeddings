@@ -56,7 +56,13 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
    pip install --no-cache-dir open-text-embeddings[server]
    ```
 
-2. Run the server with the desired model using the following command which normalize embeddings is enabled by default:
+2. Download the desired model using the following command, for example `intfloat/e5-large-v2`:
+
+   ```bash
+   ./download.sh intfloat/e5-large-v2
+   ```
+
+3. Run the server with the desired model using the following command which normalize embeddings is enabled by default:
 
    ```bash
    MODEL=intfloat/e5-large-v2 python -m open.text.embeddings.server
@@ -82,7 +88,7 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
    MODEL=intfloat/e5-large-v2 VERBOSE=1 python -m open.text.embeddings.server
    ```
 
-3. You will see the following text from your console once the server has started:
+4. You will see the following text from your console once the server has started:
 
    ```bash
    INFO:     Started server process [19705]
