@@ -12,26 +12,25 @@ verbose = bool(os.environ.get('VERBOSE', ''))
 
 
 class GZipRequestMiddleware(BaseHTTPMiddleware):
-    async def set_body(self, request: Request):
-        receive_ = await request._receive()
+    async def dispatch(self, request, call_next):
         content_encoding = request.headers.get('Content-Encoding', '').lower()
         if (verbose):
             print("content_encoding", content_encoding)
         if 'gzip' in content_encoding:
             try:
+                body = await request.body()
                 content_length = int(
                     request.headers.get('Content-Length', '0'))
-                body = receive_.get('body')
                 if len(body) != content_length:
                     return JSONResponse(
                         content={"error": "Invalid Content-Length header"},
                         status_code=400,
                     )
-                json_byte_string = gzip.decompress(body)
-                receive_['body'] = json_byte_string
+                body = gzip.decompress(body)
+                request._body = body
                 if (verbose):
                     print("content_length", content_length)
-                    print("gzip decompressed body:", receive_['body'])
+                    print("gzip decompressed body:", body)
             except ValueError:
                 return JSONResponse(
                     content={"error": "Invalid Content-Length header"},
@@ -44,12 +43,5 @@ class GZipRequestMiddleware(BaseHTTPMiddleware):
                     status_code=400,
                 )
 
-        async def receive() -> Message:
-            return receive_
-
-        request._receive = receive
-
-    async def dispatch(self, request, call_next):
-        await self.set_body(request)
         response = await call_next(request)
         return response
