@@ -1,4 +1,4 @@
-- [jayxuz](https://github.com/jayxuz) contributed [#5](https://github.com/limcheekin/open-text-embeddings/pull/5): improved OpenAI API compatibility, better support for previous versions of Python (start from v3.7), better defaults and bug fixes.
-- Normalize embeddings enabled by default.
-- Added `VERBOSE` environment variable to support verbose logging, disabled by default.
-- Support `openai` package version >= 1.0.0.
+- feat: Added dimensions to request parameter of the embeddings endpoint.
+- fix: Changed langchain imports to langchain_community.
+- fix: GZipRequestMiddleware caused request error in fastapi 0.109.2.
+- doc: Updated readme for download model step and fix open-in-colab badge.
