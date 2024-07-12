@@ -1,0 +1,56 @@
+name: Deploy Modal
+on:
+  workflow_dispatch:
+    inputs:
+      model_name:
+        required: true
+        description: Specify model supported by sentence-transformers such as intfloat/e5-large-v2, sentence-transformers/all-MiniLM-L6-v2, sentence-transformers/all-mpnet-base-v2
+      cpu:
+        description: Specify a floating-point number of CPU cores, default to 2.0.
+      memory:
+        description: Specify minimum memory size required, default to 2048MB.
+      timeout:
+        description: Specify execution timeout, default to 600 seconds.
+      keep_warm:
+        description: Specify to keep number of containers warm and running at all times, default to 1.   
+      normalize_embeddings:
+        description: Normalize embeddings enabled by default. Disable it by specify "0" or "False"
+      verbose:
+        description: Verbose logging disabled by default. Enabled it by specify any value, otherwise leave it blank
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      MODAL_USERNAME: ${{ secrets.MODAL_USERNAME }}
+      MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+      MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+      MODEL: ${{ github.event.inputs.model_name }}
+      CPU: ${{ github.event.inputs.cpu || '2.0' }}
+      MEMORY: ${{ github.event.inputs.memory || '2048' }}
+      TIMEOUT: ${{ github.event.inputs.timeout || '600' }}
+      KEEP_WARM: ${{ github.event.inputs.keep_warm || '1' }}
+      NORMALIZE_EMBEDDINGS: ${{ github.event.inputs.normalize_embeddings || '1' }}
+      VERBOSE: ${{ github.event.inputs.verbose }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Python packages
+        run: pip install modal-client
+
+      - name: Deploy FastAPI app
+        run: >
+          STUB=$(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2 | tr '.' '-')
+          modal deploy open/text/embeddings/server/modal.py
+
+      - name: Test FastAPI app
+        run: >
+          STUB=$(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2 | tr '.' '-')
+          echo "https://${{ secrets.MODAL_USERNAME }}--$STUB/v1/embeddings"
