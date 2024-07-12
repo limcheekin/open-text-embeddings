@@ -1,8 +1,8 @@
 # Modal Lab web app for open-text-embeddings.
-from modal import Image, Stub, asgi_app
+from modal import Image, App, asgi_app
 import os
 
-stub = Stub(os.environ["STUB"])
+app = App(os.environ["APP_NAME"])
 
 image = Image.from_dockerfile(
     "Dockerfile-Modal", force_build=True
@@ -23,8 +23,7 @@ def fastapi_app():
     from open.text.embeddings.server.app import create_app
     import os
     print("os.cpu_count()", os.cpu_count())
-    app = create_app()
-    return app
+    return create_app()
 
 
 if __name__ == "__main__":
