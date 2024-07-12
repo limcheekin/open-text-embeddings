@@ -51,7 +51,7 @@ jobs:
           echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
     
       - name: Deploy FastAPI app
-        run: modal deploy open.text.embeddings.server.modal
+        run: pwd;ls -la;modal deploy open.text.embeddings.server.modal
 
       - name: Test FastAPI app
         run: >

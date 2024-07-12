@@ -2,6 +2,7 @@ FROM debian:bullseye-slim AS build-image
 
 #ARG MODEL
 #ENV MODEL=${MODEL}
+RUN pwd;ls -la
 
 COPY ./download.sh ./
 
