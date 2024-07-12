@@ -48,7 +48,7 @@ jobs:
       - name: Deploy FastAPI app
         run: >
           STUB=$(echo "${{ github.event.inputs.model_name }}" | cut -d'/' -f2 | tr '.' '-')
-          modal deploy open/text/embeddings/server/modal.py
+          modal deploy open.text.embeddings.server.modal
 
       - name: Test FastAPI app
         run: >

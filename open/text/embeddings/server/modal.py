@@ -1,5 +1,6 @@
 # Modal Lab web app for open-text-embeddings.
 from modal import Image, Stub, asgi_app
+import os
 
 stub = Stub(os.environ["STUB"])
 
