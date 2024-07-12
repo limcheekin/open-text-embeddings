@@ -10,6 +10,7 @@ image = Image.from_dockerfile(
     "MODEL": os.environ["MODEL"],
     "NORMALIZE_EMBEDDINGS": os.environ["NORMALIZE_EMBEDDINGS"],
     "VERBOSE": os.environ["VERBOSE"],
+    "HOME": os.environ["HOME"],
     "HF_HOME": "/tmp/hf_home",
 })
 
