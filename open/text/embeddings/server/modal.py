@@ -14,9 +14,9 @@ image = Image.from_dockerfile(
 })
 
 cpu = float(os.getenv("CPU", 2.0))
-memory = int(os.getenv("MEMORY"), 2048) 
-timeout = int(os.getenv("TIMEOUT"), 600)
-keep_warm = int(os.getenv("KEEP_WARM"), 1)
+memory = int(os.getenv("MEMORY", 2048)) 
+timeout = int(os.getenv("TIMEOUT", 600))
+keep_warm = int(os.getenv("KEEP_WARM", 1))
 @stub.function(image=image, cpu=cpu, memory=memory, timeout=timeout, keep_warm=keep_warm)
 @asgi_app()
 def fastapi_app():
