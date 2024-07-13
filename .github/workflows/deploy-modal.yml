@@ -54,4 +54,4 @@ jobs:
         run: HOME=$(pwd) modal deploy open.text.embeddings.server.modal
 
       - name: Test FastAPI app
-        run: ./test.sh https://${{ secrets.MODAL_USERNAME }}--${APP_NAME}-fastapi-app.modal.run/v1/embeddings"
+        run: ./test.sh "https://${{ secrets.MODAL_USERNAME }}--${APP_NAME}-fastapi-app.modal.run/v1/embeddings"
