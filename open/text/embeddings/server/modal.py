@@ -5,7 +5,7 @@ import os
 app = App(os.environ["APP_NAME"])
 
 image = Image.from_registry("python:3.11-slim-bookworm"
-        ).copy_local_file(local_path: f"{os.environ['HOME']}/download.sh"
+        ).copy_local_file(f"{os.environ['HOME']}/download.sh"
         ).dockerfile_commands(
             "RUN apt-get update && apt-get install -y git-lfs",
             f"RUN chmod +x *.sh && ./download.sh {os.environ['MODEL']}"
