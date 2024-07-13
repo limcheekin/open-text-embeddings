@@ -9,7 +9,7 @@ image = Image.from_registry("python:3.11-slim-bookworm"
         ).dockerfile_commands(
             "RUN apt-get update && apt-get install -y git-lfs",
             f"RUN chmod +x *.sh && ./download.sh {os.environ['MODEL']}"
-        ).pip_install("open-text-embeddings[server]"
+        ).pip_install("open-text-embeddings[server]", "langchain_community"
         ).env({
             "MODEL": os.environ["MODEL"],
             "NORMALIZE_EMBEDDINGS": os.environ["NORMALIZE_EMBEDDINGS"],
