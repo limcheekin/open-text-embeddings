@@ -5,12 +5,16 @@ import os
 app = App(os.environ["APP_NAME"])
 
 image = Image.from_dockerfile(
-    "Dockerfile-Modal", force_build=True
+    "Dockerfile-Modal", 
+    force_build=True,
+    build_args={
+        "MODEL": os.environ["MODEL"],
+        "HOME": os.environ["HOME"],
+    }
 ).env({
     "MODEL": os.environ["MODEL"],
     "NORMALIZE_EMBEDDINGS": os.environ["NORMALIZE_EMBEDDINGS"],
     "VERBOSE": os.environ["VERBOSE"],
-    "HOME": os.environ["HOME"],
     "HF_HOME": "/tmp/hf_home",
 })
 

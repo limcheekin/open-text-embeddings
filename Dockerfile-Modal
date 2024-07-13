@@ -1,7 +1,8 @@
 FROM debian:bullseye-slim AS build-image
 
-#ARG MODEL
-#ENV MODEL=${MODEL}
+ARG MODEL
+ARG HOME
+ENV MODEL=${MODEL}
 COPY ${HOME}/download.sh ./
 
 # Install build dependencies
@@ -15,7 +16,7 @@ RUN chmod +x *.sh && \
 # Grab a fresh copy of the Python image
 FROM python:3.11-slim
 
-#ARG MODEL
+ARG MODEL
 
 RUN mkdir -p ${MODEL}
 COPY --from=build-image ${MODEL} ${MODEL}
