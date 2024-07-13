@@ -15,6 +15,7 @@ image = Image.from_registry("python:3.11-slim-bookworm"
             "NORMALIZE_EMBEDDINGS": os.environ["NORMALIZE_EMBEDDINGS"],
             "VERBOSE": os.environ["VERBOSE"],
             "HF_HOME": "/tmp/hf_home",
+            "APP_NAME": os.environ["APP_NAME"],
         })
 
 
