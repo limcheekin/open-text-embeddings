@@ -4,19 +4,19 @@ import os
 
 app = App(os.environ["APP_NAME"])
 
-image = Image.from_dockerfile(
-    "Dockerfile-Modal", 
-    force_build=True,
-    build_args={
-        "MODEL": os.environ["MODEL"],
-        "HOME": os.environ["HOME"],
-    }
-).env({
-    "MODEL": os.environ["MODEL"],
-    "NORMALIZE_EMBEDDINGS": os.environ["NORMALIZE_EMBEDDINGS"],
-    "VERBOSE": os.environ["VERBOSE"],
-    "HF_HOME": "/tmp/hf_home",
-})
+image = Image.from_registry("python:3.11-slim-bookworm"
+        ).copy_local_file(local_path: f"{os.environ["HOME"]}/download.sh"
+        ).dockerfile_commands(
+            "RUN apt-get update && apt-get install -y git-lfs",
+            f"RUN chmod +x *.sh && ./download.sh {os.environ["MODEL"]}"
+        ).pip_install("open-text-embeddings[server]"
+        ).env({
+            "MODEL": os.environ["MODEL"],
+            "NORMALIZE_EMBEDDINGS": os.environ["NORMALIZE_EMBEDDINGS"],
+            "VERBOSE": os.environ["VERBOSE"],
+            "HF_HOME": "/tmp/hf_home",
+        })
+
 
 cpu = float(os.getenv("CPU", 2.0))
 memory = int(os.getenv("MEMORY", 2048)) 
