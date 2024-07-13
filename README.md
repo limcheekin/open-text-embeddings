@@ -46,7 +46,9 @@ Try out open-text-embeddings in your browser:
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1wfgfkt6xk3meSF5jWHDMqo6mL0ZvPw2f?usp=sharing)
 
-## 🖥️ Standalone FastAPI Server
+## 🖥️ On-Premise Deployment
+
+### Standalone FastAPI Server
 
 To run the embeddings endpoint locally as a standalone FastAPI server, follow these steps:
 
@@ -97,15 +99,22 @@ To run the embeddings endpoint locally as a standalone FastAPI server, follow th
    INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
    ```
 
-## ☁️ AWS Lambda Function
+## ☁️ Cloud Deployment
+To deploy the embeddings endpoint to the cloud platform using GitHub Actions, [fork](https://github.com/limcheekin/open-text-embeddings/fork) the repo first, then follow these steps for:
 
-To deploy the embeddings endpoint as an AWS Lambda Function using GitHub Actions, follow these steps:
 
-1. [Fork](https://github.com/limcheekin/open-text-embeddings/fork) the repo.
+### AWS Lambda Function
 
-2. Add your AWS credentials (`AWS_KEY` and `AWS_SECRET`) to the repository secrets. You can do this by navigating to [https://github.com/your-username/open-text-embeddings/settings/secrets/actions]().
+1. Add your AWS credentials (`AWS_KEY` and `AWS_SECRET`) to the repository secrets. You can do this by navigating to [https://github.com/your-username/open-text-embeddings/settings/secrets/actions]().
 
-3. Manually trigger the `Deploy Dev` or `Remove Dev` GitHub Actions to deploy or remove the AWS Lambda Function.
+2. Manually trigger the `Deploy Dev` or `Remove Dev` GitHub Actions to deploy or remove the AWS Lambda Function.
+
+### Modal
+
+1. Add your Modal credentials (`MODAL_TOKEN_ID`, `MODAL_TOKEN_SECRET` and `MODAL_USERNAME`) to the repository secrets. You can do this by navigating to [https://github.com/your-username/open-text-embeddings/settings/secrets/actions]().
+
+2. Manually trigger the `Deploy Modal` GitHub Actions to deploy the Modal web endpoints.
+
 
 ## 🧪 Testing the Embeddings Endpoint
 
